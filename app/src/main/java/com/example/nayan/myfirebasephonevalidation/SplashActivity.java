@@ -29,7 +29,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         init();
-        checkStatus();
+        getUser();
+//        checkStatus();
 
     }
 
@@ -83,25 +84,34 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void getUser() {
-        Log.e("Splash", "s4:");
-        db.collection(Global.KEY_USERS).document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful() && task.getResult().exists()) {
-                    Log.e("Splash", "s5:");
-                    Global.user = task.getResult().toObject(MUser.class);
-                    loadingProgress.setVisibility(View.GONE);
-                    db.collection(Global.KEY_USERS).document(userId).update("appVerCode", BuildConfig.VERSION_CODE);
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                    finish();
-                } else {
-                    Log.e("Splash", "s6:");
-                    loadingProgress.setVisibility(View.GONE);
-                    startActivity(new Intent(SplashActivity.this, RegistrationActivity.class));
-                    finish();
+        if (mAuth.getCurrentUser() != null) {
+            loadingProgress.setVisibility(View.VISIBLE);
+
+            userId = mAuth.getCurrentUser().getUid();
+            Log.e("Splash", "s4:");
+            db.collection(Global.KEY_USERS).document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful() && task.getResult().exists()) {
+                        Log.e("Splash", "s5:");
+                        Global.user = task.getResult().toObject(MUser.class);
+                        loadingProgress.setVisibility(View.GONE);
+//                    db.collection(Global.KEY_USERS).document(userId).update("appVerCode", BuildConfig.VERSION_CODE);
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        Log.e("Splash", "s6:");
+                        loadingProgress.setVisibility(View.GONE);
+                        startActivity(new Intent(SplashActivity.this, RegistrationActivity.class));
+                        finish();
+                    }
                 }
-            }
-        });
+            });
+        }
+        else {
+            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            finish();
+        }
     }
 
     private void handleApp(MConfig config) {

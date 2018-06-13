@@ -154,7 +154,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            getGlobalConfig();
+                            checkUserStatus();
+//                            getGlobalConfig();
                         } else {
                             progressBar.setVisibility(View.GONE);
                             Log.e("Login", "ERR:" + task.getException().getMessage());
@@ -168,11 +169,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getUser() {
+        Log.e("Login", "s8:");
         userId = mAuth.getCurrentUser().getUid();
         db.collection(Global.KEY_USERS).document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
+                    Log.e("Login", "s9:");
                     Global.user = task.getResult().toObject(MUser.class);
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
@@ -182,14 +185,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getGlobalConfig() {
+        Log.e("Login", "s1:");
         db.collection(Global.CONFIG).document(Global.ALL).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
                 if (task.isSuccessful() && task.getResult().exists()) {
+                    Log.e("Login", "s2:");
                     Global.config = task.getResult().toObject(MConfig.class);
                     checkUserStatus();
                 } else {
+                    Log.e("Login", "s3:");
+                    startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+                    finish();
                     progressBar.setVisibility(View.GONE);
                 }
 
@@ -198,18 +206,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void checkUserStatus() {
+        Log.e("Login", "s4:");
         userId = mAuth.getCurrentUser().getUid();
         db.collection(Global.KEY_USERS).document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-
+                    Log.e("Login", "s5:");
                     boolean isUserExistInDB = task.getResult().exists();
 
                     if (isUserExistInDB) {
+                        Log.e("Login", "s6:");
                         getUser();
 
                     } else {
+                        Log.e("Login", "s7:");
                         startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
                         finish();
                     }

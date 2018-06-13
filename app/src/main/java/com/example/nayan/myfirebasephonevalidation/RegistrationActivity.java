@@ -53,7 +53,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
         progressBar = findViewById(R.id.loadingProgress);
-
+progressBar.setVisibility(View.GONE);
 
         // Firebase Auth
 
@@ -67,11 +67,13 @@ public class RegistrationActivity extends AppCompatActivity {
         mReffer = findViewById(R.id.reg_Reffer);
         tilDeposit = findViewById(R.id.tilDeposit);
         mCreateBtn = findViewById(R.id.reg_create_btn);
-
+        mCreateBtn.setEnabled(true);
         db.collection(Global.CONFIG).document(Global.ALL).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful() && task.getResult().exists()) {
+                    Log.e("Regis", "s1:");
                     Global.config = task.getResult().toObject(MConfig.class);
                     mCreateBtn.setEnabled(true);
                 }
@@ -99,6 +101,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void getUserInfo() {
+        Log.e("Regis", "s2:");
         progressBar.setVisibility(View.VISIBLE);
         final String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
@@ -106,14 +109,12 @@ public class RegistrationActivity extends AppCompatActivity {
         String name = mDisplayName.getEditText().getText().toString().trim();
         final String referPhone = mReffer.getEditText().getText().toString().trim();
         String depositAmountStr = tilDeposit.getEditText().getText().toString().trim();
-        int depositAmount = Integer.parseInt(depositAmountStr);
 
         final MUser user = new MUser();
         user.userId = userId;
         user.name = name;
         user.deviceToken = deviceToken;
         user.phone = mAuth.getCurrentUser().getPhoneNumber();
-        user.depositAmount = depositAmount;
 
 
         db.collection(Global.KEY_USERS)
@@ -123,41 +124,10 @@ public class RegistrationActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            Log.e("Regis", "s3:");
                             Global.user = user;
                             if (!task.getResult().getDocuments().isEmpty()) {
-                                MUser parent = task.getResult().getDocuments().get(0).toObject(MUser.class);
-                                if (!parent.userId.equals(user.userId)) {
-                                    user.level1Id = parent.phone;
-                                    user.root = parent.phone;
-                                    if (parent.root != null && parent.root.length() > 0) {
-                                        user.root += "#" + parent.root;
-
-                                        String[] levels = user.root.split("#");
-                                        for (int i = 0; i < levels.length; i++) {
-                                            if (i == 1) {
-                                                user.level2Id = levels[1];
-                                            } else if (i == 2) {
-                                                user.level3Id = levels[2];
-                                            } else if (i == 3) {
-                                                user.level4Id = levels[3];
-                                            } else if (i == 4) {
-                                                user.level5Id = levels[4];
-                                            } else if (i == 5) {
-                                                user.level6Id = levels[5];
-                                            } else if (i == 6) {
-                                                user.level7Id = levels[6];
-                                            } else if (i == 7) {
-                                                user.level8Id = levels[7];
-                                            } else if (i == 8) {
-                                                user.level9Id = levels[8];
-                                            } else if (i == 9) {
-                                                user.level10Id = levels[9];
-                                            }
-                                        }
-                                    }
-
-                                }
-
+                                Log.e("Regis", "s4:");
                             } else {
                                 Log.e("Regis", "No phone no found");
                             }
@@ -171,10 +141,12 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void saveUserToDB(MUser user) {
+        Log.e("Regis", "s5:");
         db.collection(Global.KEY_USERS).document(userId).set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        Log.e("Regis", "s6:");
                         progressBar.setVisibility(View.GONE);
                         db.collection(Global.KEY_USERS).document(userId).update("createdDate", FieldValue.serverTimestamp());
                         Intent mainIntent = new Intent(RegistrationActivity.this, MainActivity.class);
@@ -185,6 +157,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.e("Regis", "s7:");
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(RegistrationActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }

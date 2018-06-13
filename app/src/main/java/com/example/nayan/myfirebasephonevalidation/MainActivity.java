@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         tvPhone = findViewById(R.id.tvPhone);
 
         toolbar = findViewById(R.id.toolbar);
-
+        setSupportActionBar(toolbar);
 
     }
 
