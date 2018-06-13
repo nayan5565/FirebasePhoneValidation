@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="30dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:text="@string/login"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/login_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:text="@string/usePhone"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+
+        <EditText
+            android:id="@+id/edtPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_label"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_edt"
+            android:hint="@string/phone"
+            android:inputType="phone"
+            android:paddingBottom="10dp"
+            android:paddingLeft="65dp"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tvCountryCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_label"
+            android:background="@drawable/rounded_edt_left"
+            android:padding="10dp"
+            android:text="@string/identy"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtPhone"
+            android:background="@drawable/rounded"
+            android:text="@string/send"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_btn"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/red" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/loading_progress" />
+
+</RelativeLayout>

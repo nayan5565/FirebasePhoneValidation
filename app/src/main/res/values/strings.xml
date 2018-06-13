@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MyFirebasePhoneValidation</string>
+    <string name="create_account">Create Account</string>
+    <string name="display_name">Name</string>
+    <string name="action_log_out">LogOut</string>
+    <string name="phone">Phone Number</string>
+    <string name="usePhone">Use Phone Number</string>
+    <string name="login">Login Page</string>
+    <string name="identy">+880</string>
+    <string name="send">SEND</string>
+</resources>
